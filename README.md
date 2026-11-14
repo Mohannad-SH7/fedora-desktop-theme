@@ -1,56 +1,54 @@
 # Fedora GNOME Desktop Theme
 
-User-level backup of this Fedora GNOME desktop configuration. It records the
-dark GNOME appearance, Nordic GTK theme, Adwaita icons, Blur My Shell settings,
-and Nord palette for Ptyxis.
+Self-contained, user-level export of a Fedora GNOME desktop setup. The GTK
+theme, red developer wallpaper, terminal palette, and Blur My Shell settings
+are included in this repository; restore them with `./apply.sh`.
+
+## Included settings and assets
+
+- GNOME dark appearance with blue accent
+- Nordic GTK theme and its upstream license
+- Adwaita icons and Linux cursor theme
+- Original red developer wallpaper (`wallpapers/red-developer.png`)
+- Blur My Shell configuration, including blurred/translucent windows
+- Nord palette for the default Ptyxis profile
+
+The Windows Insider wallpaper currently used on the source desktop is not
+redistributed here. This repository includes an original red wallpaper
+instead.
 
 ## Requirements
 
-- Fedora Workstation with GNOME, `gsettings`, and `dconf`
-- Blur My Shell GNOME Shell extension
-- Ptyxis terminal
-- Nordic GTK theme installed at
-  `~/.themes/Nordic-bluish-accent-standard-buttons`
-- The red Windows Insider wallpaper available at
-  `~/Downloads/windows-insider-4000x4000-27655.png`
+- Fedora GNOME with `gsettings`, `dconf`, and `gnome-extensions`
+- Blur My Shell extension installed and available
+- Ptyxis terminal installed
 
-The GTK theme is available from
-[EliverLara/Nordic](https://github.com/EliverLara/Nordic/releases). Install it
-for your user; this repository does not install packages or make system-wide
-changes.
+The Nordic GTK theme is bundled under `themes/` and installed to your user
+theme directory by the restore script. No package installation or
+system-wide changes are performed.
 
-## Apply the settings
+## Restore
 
-After meeting the requirements above, run:
+From the repository directory:
 
 ```sh
 ./apply.sh
 ```
 
-The script applies the GNOME settings, restores Blur My Shell's exported
-preferences, imports the Nord Ptyxis palette, and selects it for the default
-Ptyxis profile.
+The script copies the bundled GTK theme into `~/.themes`, applies the GNOME
+appearance values, sets the bundled wallpaper, restores Blur My Shell's
+preferences, and imports/selects the Nord Ptyxis palette.
 
-## Publish to GitHub
+## Files
 
-This folder is already a local Git repository. After installing and
-authenticating GitHub CLI, create the public repository and push it with:
-
-```sh
-git commit -m "Add desktop theme backup"
-gh repo create fedora-desktop-theme --public --source=. --push
-```
-
-## Wallpaper
-
-The wallpaper setting points to the image in `~/Downloads`. The image is not
-included here: it appears to be Windows Insider artwork, so this public
-configuration repository does not redistribute it. Use a copy you are
-authorized to use at the path above, or edit the wallpaper path in `apply.sh`.
-
-## Exported files
-
-- `settings/desktop.ini` — appearance values and wallpaper path
-- `settings/blur-my-shell.dconf` — Blur My Shell preferences
-- `palettes/Nord.palette` — custom Nord terminal palette
 - `apply.sh` — user-level restore script
+- `settings/desktop.ini` — readable snapshot of GNOME and Ptyxis values
+- `settings/blur-my-shell.dconf` — exported Blur My Shell preferences
+- `palettes/Nord.palette` — Ptyxis palette definition
+- `themes/Nordic-bluish-accent-standard-buttons/` — bundled Nordic theme
+- `wallpapers/red-developer.svg` and `.png` — original wallpaper source and image
+
+## Upstream theme
+
+Nordic is distributed under GPL-3.0; its license is included with the theme.
+The upstream project is [EliverLara/Nordic](https://github.com/EliverLara/Nordic).

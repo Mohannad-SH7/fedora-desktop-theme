@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-theme_dir="$HOME/.themes/Nordic-bluish-accent-standard-buttons"
-wallpaper="$HOME/Downloads/windows-insider-4000x4000-27655.png"
 blur_extension="blur-my-shell@aunetx"
 blur_schema_dir="$HOME/.local/share/gnome-shell/extensions/$blur_extension/schemas"
 repo_dir="$(cd -- "$(dirname -- "$0")" && pwd)"
+theme_source="$repo_dir/themes/Nordic-bluish-accent-standard-buttons"
+theme_target="$HOME/.themes/Nordic-bluish-accent-standard-buttons"
+wallpaper="$repo_dir/wallpapers/red-developer.png"
 
 die() {
     printf 'Error: %s\n' "$*" >&2
@@ -16,10 +17,14 @@ command -v gsettings >/dev/null || die "gsettings is required"
 command -v dconf >/dev/null || die "dconf is required"
 command -v gnome-extensions >/dev/null || die "gnome-extensions is required"
 command -v ptyxis >/dev/null || die "Ptyxis is required"
-[[ -d "$theme_dir" ]] || die "Nordic GTK theme is missing: $theme_dir"
+[[ -f "$theme_source/index.theme" ]] || die "Bundled Nordic GTK theme is missing"
 [[ -f "$wallpaper" ]] || die "Wallpaper is missing: $wallpaper"
 [[ -f "$blur_schema_dir/gschemas.compiled" ]] || die "Blur My Shell is not installed"
 gnome-extensions list | grep -Fxq "$blur_extension" || die "Blur My Shell extension is unavailable"
+
+mkdir -p "$HOME/.themes"
+mkdir -p "$theme_target"
+cp -a "$theme_source/." "$theme_target/"
 
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 gsettings set org.gnome.desktop.interface accent-color 'blue'
