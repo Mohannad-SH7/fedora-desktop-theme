@@ -7,6 +7,8 @@ repo_dir="$(cd -- "$(dirname -- "$0")" && pwd)"
 theme_source="$repo_dir/themes/Nordic-bluish-accent-standard-buttons"
 theme_target="$HOME/.themes/Nordic-bluish-accent-standard-buttons"
 wallpaper="$repo_dir/wallpapers/red-developer.png"
+extension_settings="$repo_dir/settings/gnome-shell-extensions.dconf"
+enabled_extensions="$repo_dir/settings/enabled-extensions.gvariant"
 
 die() {
     printf 'Error: %s\n' "$*" >&2
@@ -19,6 +21,8 @@ command -v gnome-extensions >/dev/null || die "gnome-extensions is required"
 command -v ptyxis >/dev/null || die "Ptyxis is required"
 [[ -f "$theme_source/index.theme" ]] || die "Bundled Nordic GTK theme is missing"
 [[ -f "$wallpaper" ]] || die "Wallpaper is missing: $wallpaper"
+[[ -f "$extension_settings" ]] || die "GNOME Shell extension settings are missing"
+[[ -f "$enabled_extensions" ]] || die "Enabled extension list is missing"
 [[ -f "$blur_schema_dir/gschemas.compiled" ]] || die "Blur My Shell is not installed"
 gnome-extensions list | grep -Fxq "$blur_extension" || die "Blur My Shell extension is unavailable"
 
@@ -37,8 +41,8 @@ gsettings set org.gnome.desktop.background picture-uri "$wallpaper_uri"
 gsettings set org.gnome.desktop.background picture-uri-dark "$wallpaper_uri"
 gsettings set org.gnome.desktop.background picture-options 'zoom'
 
-gnome-extensions enable "$blur_extension"
-dconf load /org/gnome/shell/extensions/blur-my-shell/ < "$repo_dir/settings/blur-my-shell.dconf"
+dconf load /org/gnome/shell/extensions/ < "$extension_settings"
+gsettings set org.gnome.shell enabled-extensions "$(<"$enabled_extensions")"
 
 ptyxis --import-palette "$repo_dir/palettes/Nord.palette"
 profile_uuid="$(gsettings get org.gnome.Ptyxis default-profile-uuid | tr -d "'")"
